@@ -45,6 +45,41 @@ pageSchema.statics.registerVisit = function (fields) {
 
 };
 
+/**
+ * Для импорта из аналитикс - используется утилитой import.js
+ *
+ * @param fields
+ */
+pageSchema.statics.importVisitData = function (fields) {
+    var self = this;
+
+    self.findOne({
+            url : fields.url
+        },
+        function (err, page) {
+            if(err) console.error(err);
+
+            if (page){ //Обновляем статистику страницы
+                page.count = fields.count;
+                page.save(function(err,page){
+                    if (err) console.error(err);
+                })
+            } else { //Создаем запись страницы
+                var p = new self({
+                    url : fields.url,
+                    count : fields.count
+                    //last_visit : Date.now()
+                });
+                p.save(function(err,p){
+                    if (err) console.error(err);
+                });
+
+            }
+
+        });
+
+};
+
 pageSchema.statics.getData = function(url,cb){
     var self = this;
 
