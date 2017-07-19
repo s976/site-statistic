@@ -3,7 +3,7 @@ jQuery.ajax({
     url: 'http://185.14.186.110:8080/api/record',
     method: 'post',
     crossDomain: true,
-    //data : {kuku: 'reku'},
+    data : {kuku: 'reku'},
     dataType : 'json',
     success : function (data, textStatus, jqXHR) {
         //console.log(data);
