@@ -23,7 +23,7 @@ fs.readFile('data1.csv','utf8',function(err,data){
             errors : 0
         };
 
-        data.forEach(function(row){
+        data.forEach(function(row,i){
             if(row && row.url && row.count){
                 Page.importVisitData({
                     url: home + row.url,
@@ -51,7 +51,7 @@ fs.readFile('data1.csv','utf8',function(err,data){
 
                 });
             } else {
-                console.log('Error: row && row.url && row.count === false');
+                console.log('Error: row && row.url && row.count === false. For row %d %j',i,row);
                 status.processed++;
                 status.errors++;
             }

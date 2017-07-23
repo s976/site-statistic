@@ -72,7 +72,10 @@ pageSchema.statics.importVisitData = function (fields,cb) {
                     //last_visit : Date.now()
                 });
                 p.save(function(err,p){
-                    if (err) console.error(err);
+                    if (err) {
+                        console.error(err);
+                        console.log('The error was for row: %j',fields);
+                    }
                     cb(err,'new');
                 });
 
