@@ -50,7 +50,7 @@ pageSchema.statics.registerVisit = function (fields) {
  *
  * @param fields
  */
-pageSchema.statics.importVisitData = function (fields) {
+pageSchema.statics.importVisitData = function (fields,cb) {
     var self = this;
 
     self.findOne({
@@ -63,6 +63,7 @@ pageSchema.statics.importVisitData = function (fields) {
                 page.count = fields.count;
                 page.save(function(err,page){
                     if (err) console.error(err);
+                    cb(err,'update');
                 })
             } else { //Создаем запись страницы
                 var p = new self({
@@ -72,6 +73,7 @@ pageSchema.statics.importVisitData = function (fields) {
                 });
                 p.save(function(err,p){
                     if (err) console.error(err);
+                    cb(err,'new');
                 });
 
             }
