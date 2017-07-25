@@ -26,7 +26,7 @@ fs.readFile('data1.csv','utf8',function(err,data){
         data.forEach(function(row,i){
             if(row && row.url && row.count && (row.url[0]==="/") ){
                 Page.importVisitData({
-                    url: home + encodeURI(row.url),
+                    url: home + encodeURI(row.url).toLowerCase(),
                     count: row.count
                 },function (err,stat) {
                     status.processed++;

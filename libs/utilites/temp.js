@@ -1,9 +1,9 @@
 /**
  * Created by Shimon on 26/07/2017.
  */
-var t="/kuku/ruku";
+var t="/category/שות-אונליין/";
 
-var t2 = encodeURIComponent(t);
+var t2 = encodeURI(t).toLowerCase();
 
 console.log(t2);
 
