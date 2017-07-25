@@ -57,7 +57,11 @@ pageSchema.statics.importVisitData = function (fields,cb) {
             url : fields.url
         },
         function (err, page) {
-            if(err) console.error(err);
+            if(err) {
+                console.error(err);
+                cb(err);
+                return false;
+            }
 
             if (page){ //Обновляем статистику страницы
                 page.count = fields.count;

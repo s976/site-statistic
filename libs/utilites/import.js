@@ -24,14 +24,15 @@ fs.readFile('data1.csv','utf8',function(err,data){
         };
 
         data.forEach(function(row,i){
-            if(row && row.url && row.count){
+            if(row && row.url && row.count && (row.url[0]==="/") ){
                 Page.importVisitData({
-                    url: home + row.url,
+                    url: home + encodeURIComponent(row.url),
                     count: row.count
                 },function (err,stat) {
                     status.processed++;
                     if(err){
                         status.processed++;
+                        status.errors++;
                     }
                     if ('update'===stat){
                         status.updated++;
@@ -51,7 +52,7 @@ fs.readFile('data1.csv','utf8',function(err,data){
 
                 });
             } else {
-                console.log('Error: row && row.url && row.count === false. For row %d %j',i,row);
+                console.log('Error: row && row.url && row.count && (row.url[0]==="/") === false. For row %d %j',i,row);
                 status.processed++;
                 status.errors++;
             }
