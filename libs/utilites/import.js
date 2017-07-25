@@ -7,7 +7,7 @@
 var fs = require('fs');
 var parse = require('csv-parse');
 var Page = require('../pages');
-var home = 'http://dinonline.org';
+var home = 'http://din.org.il';
 
 
 fs.readFile('data1.csv','utf8',function(err,data){
