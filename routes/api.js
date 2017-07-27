@@ -14,7 +14,7 @@ router.post('/record',function (req,res,next) {
         'http://din.org.il'
     ];
 
-    if ( origins.indexOf(req.headers.origin) === -1 ){
+    if ( origins.indexOf(req.headers.origin) === -1){
         res.status(400).json({errMessage:'nu nu nu!'});
         return false;
     }
@@ -26,15 +26,23 @@ router.post('/record',function (req,res,next) {
     Page.findOne({url:req.headers.referer},function (err,page) {
         if (err) console.error(err);
 
+        var response = {};
+
         if(page){
-            res.json(page);
+            response.page = page;
         } else {
-            res.json({
+            response.page = {
                 count : 1,
                 last_visit : Date.now(),
                 just_recorded : true
-            });
+            };
         }
+        
+        Record.visitorsNow(10,function (err, visitorsNumber) {
+            response.visitors = visitorsNumber;
+            res.json(response);
+        });
+
     });
 
     Record.needRecord({

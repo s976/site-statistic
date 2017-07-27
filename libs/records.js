@@ -56,6 +56,38 @@ recordSchema.statics.needRecord = function (fields,cb) {
 };
 
 
+/**
+ * Сколько пользователей сейчас на сайте
+ *
+ * @param response
+ * @param minutes
+ * @param cb
+ */
+recordSchema.statics.visitorsNow = function(minutes, cb) {
+    var self = this;
+    var interval = minutes*60*1000;
+    var startDate = new Date() - interval;
+
+    self.find(
+        {
+         date : {$gt : startDate}
+        },
+        function (err,records) {
+            if (err) console.error(err);
+            var ips =[], uniqueIps = [];
+            if (records && Array.isArray(records)){
+                ips = records.map(function (rec) {
+                    return rec.ip;
+                });
+                uniqueIps = ips.filter(function (ip,i) {
+                    return ips.indexOf(ip) === i;
+                });
+            }
+            cb(err,uniqueIps.length);
+    });
+};
+
+
 /** @class Record */
 var Record = mongoose.model('Record', recordSchema);
 

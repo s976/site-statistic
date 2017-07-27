@@ -7,4 +7,12 @@ var t2 = encodeURI(t).toLowerCase();
 
 console.log(t2);
 
+var a = [1,2,3];
+
+var b = a.map(function (value) {
+    return value*2;
+});
+
+console.log(b);
+
 process.exit();
