@@ -22,6 +22,8 @@ router.post('/record',function (req,res,next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
+    var theIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
     //ответ с данными о статистике стр.
     Page.findOne({url:req.headers.referer},function (err,page) {
         if (err) console.error(err);
@@ -38,7 +40,7 @@ router.post('/record',function (req,res,next) {
             };
         }
         
-        Record.visitorsNow(10,function (err, visitorsNumber) {
+        Record.visitorsNow(10, req.headers.origin ,function (err, visitorsNumber) {
             response.visitors = visitorsNumber;
             res.json(response);
         });
@@ -46,7 +48,7 @@ router.post('/record',function (req,res,next) {
     });
 
     Record.needRecord({
-        ip:req.connection.remoteAddress,
+        ip: theIP,
         url: req.headers.referer
         },
         function (err,records) {
@@ -54,12 +56,13 @@ router.post('/record',function (req,res,next) {
 
             if (records.length === 0){ //посещений не было в последнее время. нужно регистрировать
                 Record.addRecord({
-                    ip:req.connection.remoteAddress,
+                    ip:theIP,
                     url: req.headers.referer
                 });
 
+
                 Page.registerVisit({
-                    ip:req.connection.remoteAddress,
+                    ip:theIP,
                     url: req.headers.referer
                 });
 

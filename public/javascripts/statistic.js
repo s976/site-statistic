@@ -1,5 +1,4 @@
 jQuery.ajax({
-    //url: 'http://localhost:8080/api/record',
     url: 'http://stat.dinonline.org:8080/api/record',
     method: 'post',
     crossDomain: true,

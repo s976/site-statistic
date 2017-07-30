@@ -59,18 +59,19 @@ recordSchema.statics.needRecord = function (fields,cb) {
 /**
  * Сколько пользователей сейчас на сайте
  *
- * @param response
  * @param minutes
+ * @param origin Для какого сайта запрос
  * @param cb
  */
-recordSchema.statics.visitorsNow = function(minutes, cb) {
+recordSchema.statics.visitorsNow = function(minutes, origin, cb) {
     var self = this;
     var interval = minutes*60*1000;
     var startDate = new Date() - interval;
 
     self.find(
         {
-         date : {$gt : startDate}
+            date : {$gt : startDate},
+            url : {$regex : origin + ".*"}
         },
         function (err,records) {
             if (err) console.error(err);
@@ -82,6 +83,7 @@ recordSchema.statics.visitorsNow = function(minutes, cb) {
                 uniqueIps = ips.filter(function (ip,i) {
                     return ips.indexOf(ip) === i;
                 });
+
             }
             cb(err,uniqueIps.length);
     });
