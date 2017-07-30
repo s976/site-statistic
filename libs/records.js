@@ -53,7 +53,7 @@ recordSchema.statics.needRecord = function (fields,cb) {
             cb(err, records);
         });
 
-};
+};//
 
 
 /**
