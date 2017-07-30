@@ -22,7 +22,7 @@ router.post('/record',function (req,res,next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-    var theIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    var theIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; //это для CloudFlare
 
     //ответ с данными о статистике стр.
     Page.findOne({url:req.headers.referer},function (err,page) {
