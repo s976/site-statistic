@@ -32,7 +32,7 @@ pageSchema.statics.registerVisit = function (fields) {
                     console.log(page);
                 })
             } else { //Создаем запись страницы
-                var t = (page.title) ? fields.title : '';
+                var t = (fields.title) ? fields.title : '';
                 var p = new self({
                     url : fields.url,
                     title :t,
