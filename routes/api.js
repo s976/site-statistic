@@ -63,7 +63,8 @@ router.post('/record',function (req,res,next) {
 
                 Page.registerVisit({
                     ip:theIP,
-                    url: req.headers.referer
+                    url: req.headers.referer,
+                    title: req.body.title
                 });
 
 

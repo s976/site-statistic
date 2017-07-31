@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 
 var pageSchema = new Schema({
     url : String,
+    title: String,
     count : {type:Number,default:1},
     last_visit : Date
 });
@@ -22,14 +23,19 @@ pageSchema.statics.registerVisit = function (fields) {
             if (page){ //Обновляем статистику страницы
                 page.count++;
                 page.last_visit = Date.now();
+                if (fields.title){
+                    page.title = (fields.title);
+                }
                 page.save(function(err,page){
                     if (err) console.error(err);
                     console.log('Добавили 1 к посещениям страницы');
                     console.log(page);
                 })
             } else { //Создаем запись страницы
+                var t = (page.title) ? fields.title : '';
                 var p = new self({
                     url : fields.url,
+                    title :t,
                     count : 1,
                     last_visit : Date.now()
                 });
