@@ -17,7 +17,7 @@ jQuery.ajax({
 });
 
 function getTitle() {
-    var title=decodeURIComponent(window.location.href);
+    var title='';
 
     if (window.location.hostname === 'din.org.il'){
         title = jQuery("meta[name='twitter:title']").attr('content').trim();
@@ -25,6 +25,10 @@ function getTitle() {
 
     if (window.location.hostname === 'dinonline.org'){
         title = jQuery("h1.single-title,h1.archive_title ").text().trim();
+    }
+
+    if(!title) {
+        title=decodeURIComponent(window.location.href);
     }
 
     return title;
