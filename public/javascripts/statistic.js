@@ -44,7 +44,7 @@ function getVisits() {
 function visitsTable(data) {
     var title,i;
     var html = "<table class='table table-striped table-condensed'>";
-    var count = (data.length>=10) ? 10 : data.length;
+    var count = (data.length>=11) ? 11 : data.length;
     for(i = 0;i<count;i++){
         if (!data[i].title) continue;
         html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td><td>" + data[i].count +
