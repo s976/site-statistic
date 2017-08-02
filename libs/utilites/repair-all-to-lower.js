@@ -38,10 +38,10 @@ Page.find({},function (err,pages) {
 function doNagla(start,count,pages) {
     var a=0,timeout = 30;
     var timer = setTimeout(function (start) {
-        console.log("Прошло уже %d секунд, а нагла, которая начинается с %d не завершилась... Обработали %d записей для этой наглы", start,timeout,a);
+        console.log("Прошло уже %d секунд, а нагла, которая начинается с %d не завершилась... Обработали %d записей для этой наглы", timeout, start, a);
         console.log(status);
         process.exit();
-    },60*1000);
+    },timeout*1000);
     for(var i = start; i<start+count;i++){
         if (i>=pages.length){
             console.log("Ты хочешь выйти из массива!");
