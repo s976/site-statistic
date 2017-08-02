@@ -59,13 +59,19 @@ pageSchema.statics.registerVisit = function (fields) {
 pageSchema.statics.enrichWithTitles = function (arr, cb) {
     var self = this;
     var processed = 0;
-    arr.forEach(function (page,i) {
-        self.find({url:page.url})
+    arr.forEach(function (page,i) { //Для каждой полученной записи
+        self.find({url:page.url})   //Находим соответствующую страницу (страницы-хотя должны быть одна)
             .sort({count:-1})
             .exec(function(err,pages){
-                arr[i].title = pages[0].title;
-                arr[i].visits = pages[0].count;
-                arr[i].last_visit=pages[0].last_visit;
+                if (err) console.error(err);
+                if ( Array.isArray(pages) && pages.length>0 ){
+                    arr[i].title = pages[0].title;
+                    arr[i].visits = pages[0].count;
+                    arr[i].last_visit=pages[0].last_visit;
+                } else {
+                    console.log("Почему-то не нашли страницу %s чтобы обаготить ее заголовком",page.url);
+                }
+
                 processed++;
                 if( processed>=arr.length ){
                     cb(arr);
