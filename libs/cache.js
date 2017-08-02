@@ -4,7 +4,7 @@ var settings = require('../settings');
 
 var cache = {
     updated : new Date(),
-    range : 180, //Count visits in last n minutes
+    range : 20, //Count visits in last n minutes
     updateInterval : 10000, //milliseconds Cache update
     maxPages : 10
 };
