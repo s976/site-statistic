@@ -52,6 +52,103 @@ pageSchema.statics.registerVisit = function (fields) {
 };
 
 /**
+ * Получает масив объектов, в каждом объекте задано url. В соответствии с url дообавляет title и кол. посещений
+ * @param arr
+ * @param cb
+ */
+pageSchema.statics.enrichWithTitles = function (arr, cb) {
+    var self = this;
+    var processed = 0;
+    arr.forEach(function (page,i) {
+        self.find({url:page.url})
+            .sort({count:-1})
+            .exec(function(err,pages){
+                arr[i].title = pages[0].title;
+                arr[i].visits = pages[0].count;
+                arr[i].last_visit=pages[0].last_visit;
+                processed++;
+                if( processed>=arr.length ){
+                    cb(arr);
+                }
+            });
+    });
+};
+
+
+/**
+ * Для заданной страницы, находит ее дубликаты (может с большими буквами), стирает их, а количество засчитывает как
+ * общее
+ *
+ * @param url
+ * @param cb
+ * @returns {boolean}
+ */
+pageSchema.statics.repairToLowerCase = function (url,status,cb) {
+    var self = this;
+
+    status.curUrl = url;
+
+    if(!url){
+        console.log("!url");
+        cb();
+        return false;
+    }
+
+
+    //Зкранирование спец. символов
+    var urlForReg = '^' + url.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + '$';
+
+    self.find({ url:{$regex:urlForReg,$options:'i'} },
+        function(err,pages){
+            if (err) console.error(err);
+            if(!pages || pages.length===0){
+                console.log("Что-то не то. Нет таких страниц. %s",url);
+                status.errors++;
+                cb();  //Должно быть запущенно всегда. Иначе счетчик собъется
+                return false;
+            }
+
+            if ( (pages.length===1) && (pages[0].url.toLowerCase() === pages[0].url)){
+                status.wasOk++;
+                cb(pages[0].url);
+                return false; //Все хорошо, ничего не надо
+            }
+
+            var count = 0;
+            var title = '';
+            pages.forEach(function (page) {
+                count+=page.count;
+                if (page.title)
+                    title = page.title;
+            });
+            pages[0].count = count;
+            pages[0].title = title;
+
+
+            pages[0].save(function (err,p) {
+                if (err) {
+                    console.error(err);
+                    status.errors++;
+                }
+                status.duplicated++;
+                //console.log("Исравлено к маленьким буквам, для стр. %s. Было %d страницы", p.url,pages.length);
+                var removed = 0;
+                var haveToBeRemoved = pages.length-1;
+                for(var a=1;a<pages.length;a++){
+                    pages[a].remove(function (err,removedPage) {
+                        if (err) console.error(err);
+                        removed++;
+                        if(removed>=haveToBeRemoved){
+                            status.removed+=haveToBeRemoved;
+                            cb(pages[0].url);
+                        }
+                    })
+                }
+            })
+        });
+};
+
+/**
  * Для импорта из аналитикс - используется утилитой import.js
  *
  * @param fields

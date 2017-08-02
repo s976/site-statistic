@@ -90,6 +90,68 @@ recordSchema.statics.visitorsNow = function(minutes, origin, cb) {
 };
 
 
+/**
+ * Последние просмотренные страницы.
+ * Если есть одну стр. смотрят несколько человек, она записывается один раз, и записывается поле count
+ *
+ * @param minutes
+ * @param origin Для какого сайта запрос
+ * @param cb
+ */
+recordSchema.statics.lastVisits = function(minutes, maxPages, origin, cb) {
+    var self = this;
+    var interval = minutes*60*1000;
+    var startDate = new Date() - interval;
+
+    self.find(
+        {
+            date : {$gt : startDate},
+            url : {$regex : origin + ".*"}
+        },
+        function (err,records) {
+            var processedRecords = [], registeredUrls = [];
+
+            if (err) console.error(err);
+
+            if (records && Array.isArray(records)){
+
+                records.forEach(function(rec,i){
+
+                    if (registeredUrls.indexOf(rec.url) !== -1)
+                        return;
+
+                    var count = records.filter(function (r) {
+                        return r.url === rec.url;
+                    }).length;
+
+                    processedRecords.push({
+                        url:rec.url,
+                        count : count
+                    });
+                    registeredUrls.push(rec.url);
+
+                });
+
+                processedRecords.sort(function (a, b) {
+                    if (a.count > b.count) {
+                        return -1;
+                    }
+                    if (a.count < b.count) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
+                if (processedRecords.length>maxPages){
+                    processedRecords.length = maxPages;
+                }
+
+            }
+            cb(err,processedRecords);
+        });
+};
+
+
 /** @class Record */
 var Record = mongoose.model('Record', recordSchema);
 

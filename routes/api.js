@@ -5,16 +5,12 @@ var express = require('express');
 var router = express.Router();
 var Record = require('../libs/records');
 var Page = require('../libs/pages');
+var cache = require('../libs/cache');
+var settings = require('../settings');
 
 router.post('/record',function (req,res,next) {
 
-    var origins = [
-        'http://dev.dinonline.org',
-        'http://dinonline.org',
-        'http://din.org.il'
-    ];
-
-    if ( origins.indexOf(req.headers.origin) === -1){
+    if ( settings.sites.indexOf(req.headers.origin) === -1){
         res.status(400).json({errMessage:'nu nu nu!'});
         return false;
     }
@@ -24,7 +20,10 @@ router.post('/record',function (req,res,next) {
 
     var theIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress; //это для CloudFlare
 
+    req.headers.referer = req.headers.referer.toLowerCase();
+
     //ответ с данными о статистике стр.
+    //TODO: нужны только маленькие буквы. и проверить что нет больших
     Page.findOne({url:req.headers.referer},function (err,page) {
         if (err) console.error(err);
 
@@ -70,12 +69,26 @@ router.post('/record',function (req,res,next) {
 
             }
         });
+});
 
+router.get('/cache',function (req,res) {
+    /*
+    if ( settings.sites.indexOf(req.headers.origin) === -1){
+        res.status(400).json({errMessage:'nu nu nu!'});
+        return false;
+    }
+*/
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-
-
+    //res.json(cache);
+    res.json(cache['http://din.org.il']);
 
 });
 
+
+router.post('/test',function (req,res,next) {
+    res.json(cache);
+});
 
 module.exports = router;
