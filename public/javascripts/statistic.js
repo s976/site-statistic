@@ -16,21 +16,30 @@ jQuery.ajax({
     }
 });
 
+getVisits();
+
 var timer = setInterval(function () {
+    getVisits();
+},30000);
+
+
+function getVisits() {
     jQuery.ajax({
         url: 'http://stat.dinonline.org:8080/api/cache',
         method: 'get',
         crossDomain: true,
         dataType : 'json',
         success : function (data, textStatus, jqXHR) {
+            jQuery(".last-visits").hide();
             jQuery(".last-visits").html(visitsTable(data));
+            jQuery(".last-visits").show();
             console.log( visitsTable(data));
         },
         error : function (data, textStatus, errorThrown) {
             console.log(errorThrown);
         }
     });
-},30000);
+}
 
 
 function visitsTable(data) {
