@@ -9,13 +9,18 @@ var status = {
     errors :0
 };
 
-Page.find({},function (err,pages) {
+//var query = {url:{$regex:"[A-Z]"}};
+var query  = {};
+
+Page.find(query,function (err,pages) {
     //pages.length = 400;
+    console.log("На обработку поступило %d записей",pages.length);
     var nagla = 50;
     var start = 0;
     var naglot = Math.ceil(pages.length/nagla);
 
-    doNagla(start,nagla,pages);
+    var count = (pages.length-1<start+nagla) ? pages.length-start : nagla;
+    doNagla(start,count,pages);
 
     eventEmitter.on('naglaDone', function () {
         start +=nagla;

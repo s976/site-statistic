@@ -127,6 +127,7 @@ pageSchema.statics.repairToLowerCase = function (url,status,cb) {
             });
             pages[0].count = count;
             pages[0].title = title;
+            pages[0].url = pages[0].url.toLowerCase();
 
 
             pages[0].save(function (err,p) {
