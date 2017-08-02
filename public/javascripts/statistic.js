@@ -42,11 +42,12 @@ function getVisits() {
 
 
 function visitsTable(data) {
-    var row,i;
+    var title,i;
     var html = "<table class='table table-striped table-condensed'>";
     var count = (data.length>=10) ? 10 : data.length;
     for(i = 0;i<count;i++){
-        html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td><td>" + data[i].count +
+        title=(data[i].title)?data[i].title:decodeURIComponent(data[i].url);
+        html += "<tr><td><a href='"+data[i].url+"'>"+title+"</a></td><td>" + data[i].count +
             "</td></tr>";
     }
     html += "</table>";
