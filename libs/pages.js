@@ -87,6 +87,7 @@ pageSchema.statics.repairToLowerCase = function (url,status,cb) {
     var self = this;
 
     status.curUrl = url;
+    //console.log("Начинаем лечить %s",url);
 
     if(!url){
         console.log("!url");
@@ -101,6 +102,9 @@ pageSchema.statics.repairToLowerCase = function (url,status,cb) {
     self.find({ url:{$regex:urlForReg,$options:'i'} },
         function(err,pages){
             if (err) console.error(err);
+
+            //console.log("Нашли для %s %d записей. Начинаем обрабатывать",url,pages.length);
+
             if(!pages || pages.length===0){
                 console.log("Что-то не то. Нет таких страниц. %s",url);
                 status.errors++;
@@ -132,18 +136,23 @@ pageSchema.statics.repairToLowerCase = function (url,status,cb) {
                 }
                 status.duplicated++;
                 //console.log("Исравлено к маленьким буквам, для стр. %s. Было %d страницы", p.url,pages.length);
-                var removed = 0;
-                var haveToBeRemoved = pages.length-1;
-                for(var a=1;a<pages.length;a++){
-                    pages[a].remove(function (err,removedPage) {
-                        if (err) console.error(err);
-                        removed++;
-                        if(removed>=haveToBeRemoved){
-                            status.removed+=haveToBeRemoved;
-                            cb(pages[0].url);
-                        }
-                    })
+                if(pages.length>1){
+                    var removed = 0;
+                    var haveToBeRemoved = pages.length-1;
+                    for(var a=1;a<pages.length;a++){
+                        pages[a].remove(function (err,removedPage) {
+                            if (err) console.error(err);
+                            removed++;
+                            if(removed>=haveToBeRemoved){
+                                status.removed+=haveToBeRemoved;
+                                cb(pages[0].url);
+                            }
+                        })
+                    }
+                } else {
+                    cb(pages[0].url);
                 }
+
             })
         });
 };
