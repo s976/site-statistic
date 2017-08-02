@@ -9,6 +9,7 @@
 
 var mongoose = require('./db').mongoose;
 var Schema = mongoose.Schema;
+var settings = require('../settings');
 
 var recordSchema = new Schema({
     date : Date,
@@ -110,8 +111,6 @@ recordSchema.statics.lastVisits = function(minutes, maxPages,maxVisits, origin, 
         .sort({date:-1})
         .limit(maxVisits)
         .exec(function (err,records) {
-            console.log("Записи для кеша %d штук",records.length);
-            console.log(records);
             var processedRecords = [], registeredUrls = [];
 
             if (err) console.error(err);
@@ -122,6 +121,18 @@ recordSchema.statics.lastVisits = function(minutes, maxPages,maxVisits, origin, 
 
                     if (registeredUrls.indexOf(rec.url) !== -1)
                         return;
+
+                    //Удаляем страницы, о посещении которых другие знать не должны
+                    records = records.filter(function (r) {
+                        var isGood = true;
+                        settings.block.forEach(function (t) {
+                            if(new RegExp(t).test(r.url)){
+                                isGood = false;
+                                return false;
+                            }
+                        });
+                        return isGood;
+                    });
 
                     var count = records.filter(function (r) {
                         return r.url === rec.url;

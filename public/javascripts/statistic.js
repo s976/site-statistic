@@ -16,6 +16,21 @@ jQuery.ajax({
     }
 });
 
+
+jQuery.ajax({
+    url: 'http://stat.dinonline.org:8080/api/cache',
+    method: 'get',
+    crossDomain: true,
+    dataType : 'json',
+    success : function (data, textStatus, jqXHR) {
+        console.log(data);
+    },
+    error : function (data, textStatus, errorThrown) {
+        console.log(errorThrown);
+    }
+});
+
+
 function getTitle() {
     var title='';
 

@@ -4,6 +4,13 @@ var sites = [
     'http://din.org.il'
 ];
 
+var block = [
+    "your-question-has-been-sent-successfully",
+    "preview=",
+    "&"
+];
+
 module.exports = {
-    sites : sites
+    sites : sites,
+    block : block
 };
