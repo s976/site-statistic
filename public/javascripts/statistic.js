@@ -23,6 +23,7 @@ jQuery.ajax({
     crossDomain: true,
     dataType : 'json',
     success : function (data, textStatus, jqXHR) {
+        jQuery(".last-visits").html(visitsTable(data));
         console.log( visitsTable(data));
     },
     error : function (data, textStatus, errorThrown) {
