@@ -7,7 +7,9 @@ var sites = [
 var block = [
     "your-question-has-been-sent-successfully",
     "preview=",
-    "&"
+    "&",
+    "s=",
+    "q="
 ];
 
 module.exports = {
