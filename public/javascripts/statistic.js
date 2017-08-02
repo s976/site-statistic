@@ -1,5 +1,4 @@
 var title = getTitle();
-console.log(title);
 
 jQuery.ajax({
     url: 'http://stat.dinonline.org:8080/api/record',
@@ -34,8 +33,6 @@ function getVisits() {
                 jQuery(".last-visits").html(visitsTable(data));
                 jQuery(".last-visits").fadeIn();
             });
-
-            console.log( visitsTable(data));
         },
         error : function (data, textStatus, errorThrown) {
             console.log(errorThrown);
