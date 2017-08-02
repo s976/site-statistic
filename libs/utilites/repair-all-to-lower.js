@@ -27,7 +27,6 @@ Page.find({},function (err,pages) {
 
         var count = (pages.length-1<start+nagla) ? pages.length-1-start : nagla;
         doNagla(start,count,pages);
-        console.log("Запускаем новую наглу от %d", start);
     });
 
 });
@@ -36,6 +35,7 @@ Page.find({},function (err,pages) {
 
 
 function doNagla(start,count,pages) {
+    console.log("Запустилась новая нагла от %d", start);
     var a=0,timeout = 30;
     var timer = setTimeout(function (start) {
         console.log("Прошло уже %d секунд, а нагла, которая начинается с %d не завершилась... Обработали %d записей для этой наглы", timeout, start, a);
