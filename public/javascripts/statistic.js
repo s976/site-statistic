@@ -16,20 +16,21 @@ jQuery.ajax({
     }
 });
 
-
-jQuery.ajax({
-    url: 'http://stat.dinonline.org:8080/api/cache',
-    method: 'get',
-    crossDomain: true,
-    dataType : 'json',
-    success : function (data, textStatus, jqXHR) {
-        jQuery(".last-visits").html(visitsTable(data));
-        console.log( visitsTable(data));
-    },
-    error : function (data, textStatus, errorThrown) {
-        console.log(errorThrown);
-    }
-});
+var timer = setInterval(function () {
+    jQuery.ajax({
+        url: 'http://stat.dinonline.org:8080/api/cache',
+        method: 'get',
+        crossDomain: true,
+        dataType : 'json',
+        success : function (data, textStatus, jqXHR) {
+            jQuery(".last-visits").html(visitsTable(data));
+            console.log( visitsTable(data));
+        },
+        error : function (data, textStatus, errorThrown) {
+            console.log(errorThrown);
+        }
+    });
+},30000);
 
 
 function visitsTable(data) {
@@ -37,7 +38,8 @@ function visitsTable(data) {
     var html = "<table class='table table-striped table-condensed'>";
     var count = (data.length>=10) ? 10 : data.length;
     for(i = 0;i<count;i++){
-        html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td></tr>";
+        html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td><td>" + data[i].count +
+            "</td></tr>";
     }
     html += "</table>";
 
