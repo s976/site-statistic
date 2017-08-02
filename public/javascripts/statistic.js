@@ -34,7 +34,8 @@ jQuery.ajax({
 function visitsTable(data) {
     var row,i;
     var html = "<table>";
-    for(i = 0;i<10;i++){
+    var count = (data.length>=10) ? 10 : data.length;
+    for(i = 0;i<count;i++){
         html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td></tr>";
     }
     html += "</table>";
