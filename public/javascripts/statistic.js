@@ -23,12 +23,24 @@ jQuery.ajax({
     crossDomain: true,
     dataType : 'json',
     success : function (data, textStatus, jqXHR) {
-        console.log(data);
+        console.log( visitsTable(data));
     },
     error : function (data, textStatus, errorThrown) {
         console.log(errorThrown);
     }
 });
+
+
+function visitsTable(data) {
+    var row,i;
+    var html = "<table>";
+    for(i = 0;i<10;i++){
+        html += "<tr><td><a href='"+data[i].url+"'>"+data[i].title+"</a></td></tr>";
+    }
+    html += "</table>";
+
+    return html;
+}
 
 
 function getTitle() {
