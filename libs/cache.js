@@ -4,9 +4,10 @@ var settings = require('../settings');
 
 var cache = {
     updated : new Date(),
-    range : 20, //Count visits in last n minutes
+    range : 10, //Count visits in last n minutes
     updateInterval : 10000, //milliseconds Cache update
-    maxPages : 10
+    maxPages : 10,
+    maxVisits : 1000 //Максимум визитов, которые учитываются (чтобы не загружать систему)
 };
 
 settings.sites.forEach(function (site) {
@@ -20,6 +21,7 @@ var timer = setInterval(function () {
     settings.sites.forEach(function(site){
         Record.lastVisits(cache.range,
             cache.maxPages,
+            cache.maxVisits,
             site,
             function (err, pages) {
                 if(err)

@@ -9,7 +9,6 @@ var cache = require('../libs/cache');
 var settings = require('../settings');
 
 router.post('/record',function (req,res,next) {
-
     if ( settings.sites.indexOf(req.headers.origin) === -1){
         res.status(400).json({errMessage:'nu nu nu!'});
         return false;
@@ -23,7 +22,6 @@ router.post('/record',function (req,res,next) {
     req.headers.referer = req.headers.referer.toLowerCase();
 
     //ответ с данными о статистике стр.
-    //TODO: нужны только маленькие буквы. и проверить что нет больших
     Page.findOne({url:req.headers.referer},function (err,page) {
         if (err) console.error(err);
 
@@ -72,12 +70,12 @@ router.post('/record',function (req,res,next) {
 });
 
 router.get('/cache',function (req,res) {
-    /*
+    console.log('Cache router');
     if ( settings.sites.indexOf(req.headers.origin) === -1){
         res.status(400).json({errMessage:'nu nu nu!'});
         return false;
     }
-*/
+
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
 

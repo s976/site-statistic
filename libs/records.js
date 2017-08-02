@@ -98,17 +98,20 @@ recordSchema.statics.visitorsNow = function(minutes, origin, cb) {
  * @param origin Для какого сайта запрос
  * @param cb
  */
-recordSchema.statics.lastVisits = function(minutes, maxPages, origin, cb) {
+recordSchema.statics.lastVisits = function(minutes, maxPages,maxVisits, origin, cb) {
     var self = this;
     var interval = minutes*60*1000;
     var startDate = new Date() - interval;
 
-    self.find(
-        {
+    self.find({
             date : {$gt : startDate},
             url : {$regex : origin + ".*"}
-        },
-        function (err,records) {
+        })
+        .sort({date:-1})
+        .limit(maxVisits)
+        .exec(function (err,records) {
+            console.log("Записи для кеша %d штук",records.length);
+            console.log(records);
             var processedRecords = [], registeredUrls = [];
 
             if (err) console.error(err);
@@ -149,6 +152,7 @@ recordSchema.statics.lastVisits = function(minutes, maxPages, origin, cb) {
             }
             cb(err,processedRecords);
         });
+
 };
 
 
