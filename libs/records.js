@@ -117,26 +117,29 @@ recordSchema.statics.lastVisits = function(minutes, maxPages,maxVisits, origin, 
 
             if (records && Array.isArray(records)){
 
+
+                //Удаляем страницы, о посещении которых другие знать не должны
+                records = records.filter(function (r) {
+                    var isGood = true;
+                    settings.block.forEach(function (t) {
+                        if(new RegExp(t).test(r.url)){
+                            isGood = false;
+                            return false;
+                        }
+                    });
+                    return isGood;
+                });
+
                 records.forEach(function(rec,i){
 
                     if (registeredUrls.indexOf(rec.url) !== -1)
                         return;
 
-                    //Удаляем страницы, о посещении которых другие знать не должны
-                    records = records.filter(function (r) {
-                        var isGood = true;
-                        settings.block.forEach(function (t) {
-                            if(new RegExp(t).test(r.url)){
-                                isGood = false;
-                                return false;
-                            }
-                        });
-                        return isGood;
-                    });
 
                     var count = records.filter(function (r) {
                         return r.url === rec.url;
                     }).length;
+
 
                     processedRecords.push({
                         url:rec.url,

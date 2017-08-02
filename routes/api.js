@@ -70,7 +70,6 @@ router.post('/record',function (req,res,next) {
 });
 
 router.get('/cache',function (req,res) {
-    console.log('Cache router');
     if ( settings.sites.indexOf(req.headers.origin) === -1){
         res.status(400).json({errMessage:'nu nu nu!'});
         return false;
