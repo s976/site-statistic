@@ -37,11 +37,11 @@ Page.find({},function (err,pages) {
 function doNagla(start,count,pages) {
     console.log("Запустилась новая нагла от %d", start);
     var a=0,timeout = 120;
-    var timer = setTimeout(function (start) {
+    var timer = setTimeout(function () {
         console.log("Прошло уже %d секунд, а нагла, которая начинается с %d не завершилась... Обработали %d записей для этой наглы", timeout, start, a);
         console.log(status);
         process.exit();
-    }(start),timeout*1000);
+    },timeout*1000);
     for(var i = start; i<start+count;i++){
         if (i>=pages.length){
             console.log("Ты хочешь выйти из массива!");
