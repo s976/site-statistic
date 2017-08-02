@@ -30,9 +30,11 @@ function getVisits() {
         crossDomain: true,
         dataType : 'json',
         success : function (data, textStatus, jqXHR) {
-            jQuery(".last-visits").hide();
-            jQuery(".last-visits").html(visitsTable(data));
-            jQuery(".last-visits").show();
+            jQuery(".last-visits").fadeOut(function () {
+                jQuery(".last-visits").html(visitsTable(data));
+                jQuery(".last-visits").fadeIn();
+            });
+
             console.log( visitsTable(data));
         },
         error : function (data, textStatus, errorThrown) {
