@@ -1,7 +1,7 @@
 var title = getTitle();
 
 jQuery.ajax({
-    url: 'http://stat.dinonline.org:8080/api/record',
+    url: 'http://stat.dinonline.org/api/record',
     method: 'post',
     crossDomain: true,
     data : {title: title },
@@ -24,7 +24,7 @@ var timer = setInterval(function () {
 
 function getVisits() {
     jQuery.ajax({
-        url: 'http://stat.dinonline.org:8080/api/cache',
+        url: 'http://stat.dinonline.org/api/cache',
         method: 'get',
         crossDomain: true,
         dataType : 'json',
