@@ -50,6 +50,7 @@ router.post('/record',function (req,res,next) {
         },
         function (err,records) {
             if (err) console.error(err);
+            if (!records) console.log("No records!!!");
 
             if (records.length === 0){ //посещений не было в последнее время. нужно регистрировать
                 Record.addRecord({
