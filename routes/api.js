@@ -81,7 +81,6 @@ router.get('/cache',function (req,res) {
     //res.json(cache);
     var site = req.headers.origin;
     res.json(cache[site]);
-
 });
 
 

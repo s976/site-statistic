@@ -15,9 +15,7 @@ settings.sites.forEach(function (site) {
 });
 
 
-
 var timer = setInterval(function () {
-
     settings.sites.forEach(function(site){
         Record.lastVisits(cache.range,
             cache.maxPages,
@@ -33,7 +31,6 @@ var timer = setInterval(function () {
                 });
         });
     });
-
 },cache.updateInterval);
 
 

@@ -3,7 +3,8 @@
 /**
  * Module dependencies.
  */
-
+let settings = require('../settings');
+let init = require('../libs/initial-setup');
 var app = require('../app');
 var debug = require('debug')('statistic:server');
 var http = require('http');
@@ -12,7 +13,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8080');
+let port = normalizePort(settings.port);
 app.set('port', port);
 
 /**
@@ -80,11 +81,10 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  console.log('Listening on ' + bind);
 }

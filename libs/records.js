@@ -117,7 +117,6 @@ recordSchema.statics.lastVisits = function(minutes, maxPages,maxVisits, origin, 
 
             if (records && Array.isArray(records)){
 
-
                 //Удаляем страницы, о посещении которых другие знать не должны
                 records = records.filter(function (r) {
                     var isGood = true;

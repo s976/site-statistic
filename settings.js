@@ -1,10 +1,18 @@
-var sites = [
+/**
+ * Allowed sites
+ * @type {*[]}
+ */
+let sites = [
     'http://dev.dinonline.org',
     'http://dinonline.org',
     'http://din.org.il'
 ];
 
-var block = [
+/**
+ * Skip follow url (don't record it)
+ * @type {*[]}
+ */
+let block = [
     "your-question-has-been-sent-successfully",
     "preview=",
     "&",
@@ -12,7 +20,10 @@ var block = [
     "q="
 ];
 
-module.exports = {
+let settings = {
     sites : sites,
-    block : block
+    block : block,
+    port : 80 //May be overwritten by InitialSetup (if port provided in args e.g. "node www --port=3000")
 };
+
+module.exports = settings;
