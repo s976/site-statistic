@@ -1,3 +1,4 @@
+//This module is not in use. And will be removed after revision
 var Record = require('../libs/records');
 var Page = require('../libs/pages');
 var settings = require('../settings');

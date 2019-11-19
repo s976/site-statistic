@@ -3,9 +3,9 @@
  * @type {*[]}
  */
 let sites = [
-    'http://dev.dinonline.org',
-    'http://dinonline.org',
-    'http://din.org.il'
+    'dev.dinonline.org',
+    'dinonline.org',
+    'din.org.il'
 ];
 
 /**
@@ -23,7 +23,9 @@ let block = [
 let settings = {
     sites : sites,
     block : block,
-    port : 80 //May be overwritten by InitialSetup (if port provided in args e.g. "node www --port=3000")
+    anotherPort : undefined, //May be overwritten by InitialSetup (if port provided in args e.g. "node www --port=3000")
+    expireTime : 5, //minutes. Visits to take into account for "Last Visits"
+    updateSummaryInterval : 10 //seconds
 };
 
 module.exports = settings;

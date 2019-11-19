@@ -23,6 +23,8 @@ var timer = setInterval(function () {
 
 
 function getVisits() {
+    if(document.visibilityState != 'visible') return;
+
     jQuery.ajax({
         url: 'http://stat.dinonline.org/api/cache',
         method: 'get',

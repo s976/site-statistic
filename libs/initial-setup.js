@@ -8,7 +8,7 @@ class InitialSetup{
 
     setPort(){
         if(yargs.argv.port){
-            settings.port = yargs.argv.port;
+            settings.anotherPort = yargs.argv.port;
         }
     }
 
