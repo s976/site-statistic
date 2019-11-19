@@ -6,7 +6,8 @@ let settings = require('../settings');
 class LastVisits {
 
     constructor(){
-        this.visits = []; //Last visits. Sorted by time (from old to new)
+        this.visits = []; //Visits on expireTime. Sorted by time (from old to new). Updated every few (expireTime)
+        // minutes
         this.updateInterval = settings.updateSummaryInterval*1000; //milliseconds to refresh object status
         this.expireTime = settings.expireTime*60*1000; //Define what is "last"
         this.summary = {};
@@ -50,6 +51,8 @@ class LastVisits {
                 this.summary[domain][this.summary[domain].length-1].count++;
             }
         }
+
+        console.log(this.summary);
     }
 
     _getDomainNameByUrl(url){
@@ -59,16 +62,17 @@ class LastVisits {
     }
 
     updateStatus(){
-        this.visits = this.visits.slice( this._findIndexOfOldestRelevantVisit() ); //drop old visits
+        //drop old visits
+        this.visits = this.visits.slice( this._findIndexOfOldestRelevantVisit(this.visits, this.expireTime) );
         this.updateSummary();
     }
 
-    _findIndexOfOldestRelevantVisit(){
-        let oldestTime = new Date() - this.expireTime; //the oldest time we want to take into account
-        for(let i=0;i<this.visits.length;i++){ //Possible to improve with binary tree search
-            if(this.visits[i].time>oldestTime) return i;
+    _findIndexOfOldestRelevantVisit(visits, interval){
+        let oldestTime = new Date() - interval; //the oldest time we want to take into account
+        for(let i=0; i<visits.length; i++){ //Possible to improve with binary tree search
+            if(visits[i].time>oldestTime) return i;
         }
-        return this.visits.length; //All visits have to be removed from queue
+        return visits.length; //All visits have to be removed from queue
     }
 
     registerVisit(visitInfo){
@@ -82,7 +86,7 @@ class LastVisits {
 
     _shouldBeRegistered(visitInfo){
         return !this.visits.some(v=>{ //If this IP on this URL already exists in last visits return FALSE
-            return (v.url===visitInfo.url && v.ip===visitInfo.ip);
+            return (v.visitInfo.url===visitInfo.url && v.visitInfo.ip===visitInfo.ip);
         });
     }
 }
