@@ -18,7 +18,9 @@ jQuery.ajax({
 getVisits();
 
 var timer = setInterval(function () {
-    getVisits();
+    if(document.visibilityState === 'visible') {
+        getVisits();
+    }
 },30000);
 
 
