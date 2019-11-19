@@ -61,8 +61,6 @@ class LastVisits {
     updateStatus(){
         this.visits = this.visits.slice( this._findIndexOfOldestRelevantVisit() ); //drop old visits
         this.updateSummary();
-        console.log("this.summary");
-        console.log(this.summary);
     }
 
     _findIndexOfOldestRelevantVisit(){
@@ -74,9 +72,17 @@ class LastVisits {
     }
 
     registerVisit(visitInfo){
-        this.visits.push({
-            time : new Date(),
-            visitInfo : visitInfo
+        if(this._shouldBeRegistered(visitInfo)) {
+            this.visits.push({
+                time: new Date(),
+                visitInfo: visitInfo
+            });
+        }
+    }
+
+    _shouldBeRegistered(visitInfo){
+        return !this.visits.some(v=>{ //If this IP on this URL already exists in last visits return FALSE
+            return (v.url===visitInfo.url && v.ip===visitInfo.ip);
         });
     }
 }
