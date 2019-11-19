@@ -52,7 +52,16 @@ class LastVisits {
             }
         }
 
-        console.log(this.summary);
+        //Sort summary bu count
+        for(let d in this.summary){
+            if(this.summary.hasOwnProperty(d)){
+                this.summary[d].sort((a,b)=>{
+                    if(a.count<b.count) return 1;
+                    if(a.count>b.count) return -1;
+                    return 0;
+                })
+            }
+        }
     }
 
     _getDomainNameByUrl(url){
